@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { Pool } from 'pg';
+import pool from './db';
+import callLogsRouter from './routes/callLogs';
 
 dotenv.config();
 
@@ -11,11 +12,6 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Database connection
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
@@ -31,6 +27,9 @@ app.get('/health/db', async (req: Request, res: Response) => {
     res.status(500).json({ status: 'error', message: 'Database connection failed' });
   }
 });
+
+// API Routes
+app.use('/api/call-logs', callLogsRouter);
 
 // Start server
 app.listen(PORT, () => {
