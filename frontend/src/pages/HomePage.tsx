@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { getCallLogs, deleteCallLog } from '../services/api';
 import type { CallLog, CallStatus } from '../types';
 import CallFormModal from '../components/CallFormModal';
+import deltyLogo from './delty-logo.png';
 
 const STATUS_COLORS: Record<CallStatus, string> = {
   new: 'bg-blue-100 text-blue-800',
@@ -78,7 +79,10 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-gray-900">Patient Call Log</h1>
+          <div className="flex items-center gap-3">
+            <img src={deltyLogo} alt="Delty Logo" className="h-8 w-8" />
+            <h1 className="text-xl font-bold text-gray-900">Patient Call Log</h1>
+          </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">{user?.email}</span>
             <button onClick={signOut} className="text-sm text-red-600 hover:text-red-700">
