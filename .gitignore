@@ -9,6 +9,10 @@ build/
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
+frontend/.env*
+backend/.env*
 
 # IDE
 .vscode/
@@ -29,3 +33,4 @@ coverage/
 
 # Docker
 postgres_data/
+backend-deploy.zip
