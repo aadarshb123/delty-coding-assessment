@@ -4,19 +4,28 @@ import { CallLog, CreateCallLogInput, UpdateCallLogInput, PaginatedResponse } fr
 export async function getCallLogs(
   page: number = 1,
   limit: number = 10,
-  status?: string
+  status?: string,
+  search?: string
 ): Promise<PaginatedResponse<CallLog>> {
   const offset = (page - 1) * limit;
 
-  let whereClause = '';
+  const conditions: string[] = [];
   const params: any[] = [];
   let paramIndex = 1;
 
   if (status && status !== 'all') {
-    whereClause = `WHERE status = $${paramIndex}`;
+    conditions.push(`status = $${paramIndex}`);
     params.push(status);
     paramIndex++;
   }
+
+  if (search) {
+    conditions.push(`(patient_name ILIKE $${paramIndex} OR phone_number ILIKE $${paramIndex})`);
+    params.push(`%${search}%`);
+    paramIndex++;
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
   // Get total count
   const countResult = await pool.query(

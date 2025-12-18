@@ -42,8 +42,9 @@ router.get('/', async (req: AuthRequest, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = Math.min(parseInt(req.query.limit as string) || 10, 100);
     const status = req.query.status as string;
+    const search = req.query.search as string;
 
-    const result = await callLogRepo.getCallLogs(page, limit, status);
+    const result = await callLogRepo.getCallLogs(page, limit, status, search);
     res.json(result);
   } catch (error) {
     console.error('Error fetching call logs:', error);

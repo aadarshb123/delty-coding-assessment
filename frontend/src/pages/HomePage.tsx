@@ -28,6 +28,7 @@ export default function HomePage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingCall, setEditingCall] = useState<CallLog | null>(null);
 
@@ -35,7 +36,7 @@ export default function HomePage() {
     setLoading(true);
     setError('');
     try {
-      const result = await getCallLogs(page, 10, statusFilter);
+      const result = await getCallLogs(page, 10, statusFilter, search);
       setCalls(result.data);
       setTotalPages(result.totalPages);
     } catch (err: any) {
@@ -47,7 +48,7 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchCalls();
-  }, [page, statusFilter]);
+  }, [page, statusFilter, search]);
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this call?')) return;
@@ -95,6 +96,13 @@ export default function HomePage() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-4">
+            <input
+              type="text"
+              placeholder="Search by name or phone..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm w-64"
+            />
             <select
               value={statusFilter}
               onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
